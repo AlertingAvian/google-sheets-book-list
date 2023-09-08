@@ -214,7 +214,7 @@ def event_loop() -> None:
         elif event == 'lookup_button':
             popup_window = sg.Window('ISBN Lookup', isbn_search_popup())
             event, values = popup_window.read()
-            if event == 'search_button' or event == "manual_isbn_enter":
+            if event == 'search_button':
                 popup_window.close()
                 try:
                     book_data = isbn.get_data(values['manual_isbn'])
