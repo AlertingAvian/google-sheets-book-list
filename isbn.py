@@ -9,6 +9,8 @@ def validate_isbn(isbnlike: any) -> bool:
 
 
 def get_data(isbnlike: any) -> BookData:
+    if not validate_isbn(isbnlike):
+        raise exceptions.InvalidISBNError(isbnlike)
     isbn = canonical(isbnlike)
     data = meta(isbn)
     description = desc(isbn)

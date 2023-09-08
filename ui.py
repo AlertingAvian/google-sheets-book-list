@@ -1,8 +1,10 @@
+import urllib.error
 from time import time
 from typing import List
 
 import PySimpleGUI as sg
 import cv2
+import isbnlib.dev._exceptions
 
 import exceptions
 import isbn
@@ -39,7 +41,7 @@ def main_layout() -> list:
 
 def isbn_search_popup() -> list:
     layout = [[sg.InputText(key="manual_isbn", tooltip="ISBN to lookup", focus=True)],
-              [sg.Button("Search", key='search_button')]]
+              [sg.Button("Search", key='search_button', bind_return_key=True)]]
     return layout
 
 
@@ -120,6 +122,11 @@ def event_loop() -> None:
                 book_data = isbn.get_data(str(scan_result[0]))
             except exceptions.NoDataError as e:
                 sg.PopupError(e.message + "\nEnter data manually.", title="Error")
+            except exceptions.InvalidISBNError as e:
+                sg.PopupError(e.message, title="Error")
+            except isbnlib.dev._exceptions.ISBNLibHTTPError as e:
+                # not sure how else to catch that other than accessing the protected member
+                sg.PopupError(e.message + "\n Try again later", title="Error")
             else:
                 window['title_box'].update(book_data.Title)
                 window['author_box'].update(", ".join(book_data.Authors))
@@ -207,12 +214,17 @@ def event_loop() -> None:
         elif event == 'lookup_button':
             popup_window = sg.Window('ISBN Lookup', isbn_search_popup())
             event, values = popup_window.read()
-            if event == 'search_button':
+            if event == 'search_button' or event == "manual_isbn_enter":
                 popup_window.close()
                 try:
                     book_data = isbn.get_data(values['manual_isbn'])
                 except exceptions.NoDataError as e:
                     sg.PopupError(e.message + "\nVerify ISBN or enter data manually.", title="Error")
+                except exceptions.InvalidISBNError as e:
+                    sg.PopupError(e.message, title="Error")
+                except isbnlib.dev._exceptions.ISBNLibHTTPError as e:
+                    # not sure how else to catch that other than accessing the protected member
+                    sg.PopupError(e.message + "\n Try again later", title="Error")
                 else:
                     window['title_box'].update(book_data.Title)
                     window['author_box'].update(", ".join(book_data.Authors))
@@ -224,7 +236,6 @@ def event_loop() -> None:
                     window['enter_button'].update(disabled=False)
                     window['description_button'].update(disabled=False)
                     window['notes_button'].update(disabled=False)
-
         previous_time = current_time
 
     stream.release()
