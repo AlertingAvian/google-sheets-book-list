@@ -6,8 +6,18 @@ import getopt
 
 
 def main():
-    import ui
-    ui.event_loop()
+    try:
+        import ui
+    except FileNotFoundError:
+        print("OAuth Client ID not found.")
+        if sys.platform == "win32":
+            if not os.path.exists(os.getenv("APPDATA") + r"\gspread"):
+                os.mkdir(os.getenv("APPDATA") + r"\gspread")
+            subprocess.run(f"explorer.exe {os.getenv('APPDATA')}\gspread")
+            import webbrowser
+            webbrowser.open("https://docs.gspread.org/en/latest/oauth2.html#for-end-users-using-oauth-client-id")
+    else:
+        ui.event_loop()
 
 
 args = sys.argv[1:]
