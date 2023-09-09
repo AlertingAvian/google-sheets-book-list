@@ -9,6 +9,8 @@ git clone https://github.com/AlertingAvian/google-sheets-book-list
 python main.py
 ```
 
+If you need to change the video device right click the player and click `Change Device`
+
 <details>
   
 <Summary>Command line arguments</Summary>
