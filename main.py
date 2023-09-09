@@ -30,5 +30,6 @@ else:
         path = os.path.dirname(os.path.abspath(__file__))
         if not os.path.exists(path + r"\venv"):
             subprocess.run(f"cd {path} && python -m venv venv", shell=True)
+        subprocess.run(f"{path}\\venv\\Scripts\\python.exe -m pip install --upgrade pip")
         subprocess.run(f"{path}\\venv\\Scripts\\python.exe -m pip install --upgrade -r {path}\\requirements.txt")
         subprocess.run(f"{path}\\venv\\Scripts\\python.exe {path}\\main.py -s")
