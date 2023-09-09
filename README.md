@@ -1,10 +1,11 @@
 # To Use
-1. Clone the repository
+1. Have [Python](https://python.org) installed. (I have only tested with 3.11 so I will only support >=3.11)
+2. Clone the repository
 ```
 git clone https://github.com/AlertingAvian/google-sheets-book-list
 ```
-2. Follow the instructions on [Using OAuth Client ID for gspread](https://docs.gspread.org/en/latest/oauth2.html#for-end-users-using-oauth-client-id)
-3. Run the program
+3. Follow the instructions on [Using OAuth Client ID for gspread](https://docs.gspread.org/en/latest/oauth2.html#for-end-users-using-oauth-client-id)
+4. Run the program
 ```
 python main.py
 ```
