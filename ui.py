@@ -1,4 +1,3 @@
-import urllib.error
 from time import time
 from typing import List
 

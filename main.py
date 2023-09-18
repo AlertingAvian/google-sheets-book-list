@@ -1,8 +1,9 @@
-import os.path
-import sys
-import subprocess
 import getopt
+import os.path
+import subprocess
+import sys
 
+import google.auth.exceptions
 
 
 def main():
@@ -16,6 +17,8 @@ def main():
             subprocess.run(f"explorer.exe {os.getenv('APPDATA')}\gspread")
             import webbrowser
             webbrowser.open("https://docs.gspread.org/en/latest/oauth2.html#for-end-users-using-oauth-client-id")
+    except google.auth.exceptions.RefreshError as e:
+        print(f"[{e}\nPossible solution delete authorized_user.json in folder with oauth credentials")
     else:
         ui.event_loop()
 
@@ -23,7 +26,6 @@ def main():
 args = sys.argv[1:]
 options = "hs"
 long_options = ["Help", "Skip_venv"]
-
 
 try:
     arguments, _ = getopt.getopt(args, options, long_options)
